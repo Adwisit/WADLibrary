@@ -114,3 +114,6 @@ dmypy.json
 
 # MARKDOWN
 *.md~
+
+# Folders
+.vscode/
