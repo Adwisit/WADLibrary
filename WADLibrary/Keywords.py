@@ -194,6 +194,8 @@ class Keywords:
             execute.analyse(res, catch_error=True)
 
     def wait_until_element_is_visible(self, locator, using='name', timeout=None, error=None, session_id=None):
+        if timeout is None:
+            timeout = self.timeout
 
         def check_visibility():
             visible = self.is_visible(locator, using, session_id)
@@ -208,6 +210,8 @@ class Keywords:
         self.wait_until_no_error(timeout, check_visibility)
 
     def wait_until_element_is_not_visible(self, locator, using='name', timeout=None, error=None, session_id=None):
+        if timeout is None:
+            timeout = self.timeout
 
         def check_visibility():
             visible = self.is_visible(locator, using, session_id)

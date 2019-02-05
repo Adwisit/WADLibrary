@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 3.1.1 (Python 3.7.2 on win32)" generated="20190205 08:27:00.794" rpa="false">
+<suite id="s1" name="Wadlibrary Demo" source="C:\Users\EliasHachichou\Github\WADLibrary\Demo\wadlibrary_demo.robot">
+<kw name="Set Up Driver" library="WADLibrary" type="setup">
+<status status="PASS" starttime="20190205 08:27:01.014" endtime="20190205 08:27:01.021"></status>
+</kw>
+<test id="s1-t1" name="Paint">
+<kw name="Set Up" library="WADLibrary" type="setup">
+<status status="PASS" starttime="20190205 08:27:01.022" endtime="20190205 08:27:01.691"></status>
+</kw>
+<kw name="Cmd Run" library="Common">
+<arguments>
+<arg>mspaint.exe</arg>
+</arguments>
+<status status="PASS" starttime="20190205 08:27:01.691" endtime="20190205 08:27:01.698"></status>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>1</arg>
+</arguments>
+<msg timestamp="20190205 08:27:02.713" level="INFO">Slept 1 second</msg>
+<status status="PASS" starttime="20190205 08:27:01.698" endtime="20190205 08:27:02.713"></status>
+</kw>
+<kw name="Attach To Window" library="WADLibrary">
+<arguments>
+<arg>Untitled - Paint</arg>
+<arg>Paint</arg>
+</arguments>
+<status status="PASS" starttime="20190205 08:27:02.713" endtime="20190205 08:27:02.836"></status>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>1</arg>
+</arguments>
+<msg timestamp="20190205 08:27:03.853" level="INFO">Slept 1 second</msg>
+<status status="PASS" starttime="20190205 08:27:02.836" endtime="20190205 08:27:03.853"></status>
+</kw>
+<kw name="Close Window" library="WADLibrary">
+<status status="PASS" starttime="20190205 08:27:03.853" endtime="20190205 08:27:04.001"></status>
+</kw>
+<kw name="Clean Up" library="WADLibrary" type="teardown">
+<status status="PASS" starttime="20190205 08:27:04.001" endtime="20190205 08:27:04.048"></status>
+</kw>
+<status status="PASS" starttime="20190205 08:27:01.021" endtime="20190205 08:27:04.049" critical="yes"></status>
+</test>
+<test id="s1-t2" name="Calculator">
+<kw name="Set Up" library="WADLibrary" type="setup">
+<status status="PASS" starttime="20190205 08:27:04.053" endtime="20190205 08:27:04.081"></status>
+</kw>
+<kw name="Cmd Run" library="Common">
+<arguments>
+<arg>calc.exe</arg>
+</arguments>
+<status status="PASS" starttime="20190205 08:27:04.083" endtime="20190205 08:27:04.088"></status>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>1</arg>
+</arguments>
+<msg timestamp="20190205 08:27:05.097" level="INFO">Slept 1 second</msg>
+<status status="PASS" starttime="20190205 08:27:04.091" endtime="20190205 08:27:05.097"></status>
+</kw>
+<kw name="Attach To Window" library="WADLibrary">
+<arguments>
+<arg>Calculator</arg>
+<arg>Calculator</arg>
+</arguments>
+<status status="PASS" starttime="20190205 08:27:05.097" endtime="20190205 08:27:05.186"></status>
+</kw>
+<kw name="Click Element" library="WADLibrary">
+<arguments>
+<arg>One</arg>
+</arguments>
+<status status="PASS" starttime="20190205 08:27:05.186" endtime="20190205 08:27:05.588"></status>
+</kw>
+<kw name="Click Element" library="WADLibrary">
+<arguments>
+<arg>Plus</arg>
+</arguments>
+<status status="PASS" starttime="20190205 08:27:05.588" endtime="20190205 08:27:05.898"></status>
+</kw>
+<kw name="Click Element" library="WADLibrary">
+<arguments>
+<arg>Two</arg>
+</arguments>
+<status status="PASS" starttime="20190205 08:27:05.898" endtime="20190205 08:27:06.242"></status>
+</kw>
+<kw name="Click Element" library="WADLibrary">
+<arguments>
+<arg>Equals</arg>
+</arguments>
+<status status="PASS" starttime="20190205 08:27:06.242" endtime="20190205 08:27:06.559"></status>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>1</arg>
+</arguments>
+<msg timestamp="20190205 08:27:07.561" level="INFO">Slept 1 second</msg>
+<status status="PASS" starttime="20190205 08:27:06.559" endtime="20190205 08:27:07.561"></status>
+</kw>
+<kw name="Close Window" library="WADLibrary">
+<status status="PASS" starttime="20190205 08:27:07.561" endtime="20190205 08:27:07.612"></status>
+</kw>
+<kw name="Clean Up" library="WADLibrary" type="teardown">
+<status status="PASS" starttime="20190205 08:27:07.625" endtime="20190205 08:27:07.681"></status>
+</kw>
+<status status="PASS" starttime="20190205 08:27:04.052" endtime="20190205 08:27:07.691" critical="yes"></status>
+</test>
+<test id="s1-t3" name="Switch window">
+<kw name="Set Up" library="WADLibrary" type="setup">
+<status status="PASS" starttime="20190205 08:27:07.694" endtime="20190205 08:27:07.746"></status>
+</kw>
+<kw name="Cmd Run" library="Common">
+<arguments>
+<arg>calc.exe</arg>
+</arguments>
+<status status="PASS" starttime="20190205 08:27:07.749" endtime="20190205 08:27:07.759"></status>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>1</arg>
+</arguments>
+<msg timestamp="20190205 08:27:08.776" level="INFO">Slept 1 second</msg>
+<status status="PASS" starttime="20190205 08:27:07.774" endtime="20190205 08:27:08.776"></status>
+</kw>
+<kw name="Attach To Window" library="WADLibrary">
+<arguments>
+<arg>Calculator</arg>
+<arg>Calculator</arg>
+</arguments>
+<status status="PASS" starttime="20190205 08:27:08.776" endtime="20190205 08:27:08.892"></status>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>1</arg>
+</arguments>
+<msg timestamp="20190205 08:27:09.897" level="INFO">Slept 1 second</msg>
+<status status="PASS" starttime="20190205 08:27:08.892" endtime="20190205 08:27:09.897"></status>
+</kw>
+<kw name="Set Current Session" library="WADLibrary">
+<arguments>
+<arg>Root</arg>
+</arguments>
+<status status="PASS" starttime="20190205 08:27:09.897" endtime="20190205 08:27:09.897"></status>
+</kw>
+<kw name="Cmd Run" library="Common">
+<arguments>
+<arg>mspaint.exe</arg>
+</arguments>
+<status status="PASS" starttime="20190205 08:27:09.897" endtime="20190205 08:27:09.903"></status>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>1</arg>
+</arguments>
+<msg timestamp="20190205 08:27:10.913" level="INFO">Slept 1 second</msg>
+<status status="PASS" starttime="20190205 08:27:09.903" endtime="20190205 08:27:10.913"></status>
+</kw>
+<kw name="Attach To Window" library="WADLibrary">
+<arguments>
+<arg>Untitled - Paint</arg>
+<arg>Paint</arg>
+</arguments>
+<status status="PASS" starttime="20190205 08:27:10.913" endtime="20190205 08:27:10.979"></status>
+</kw>
+<kw name="Set Current Session" library="WADLibrary">
+<arguments>
+<arg>Calculator</arg>
+</arguments>
+<status status="PASS" starttime="20190205 08:27:10.990" endtime="20190205 08:27:10.991"></status>
+</kw>
+<kw name="Set Focus" library="WADLibrary">
+<status status="PASS" starttime="20190205 08:27:10.992" endtime="20190205 08:27:11.038"></status>
+</kw>
+<kw name="Click Element" library="WADLibrary">
+<arguments>
+<arg>One</arg>
+</arguments>
+<status status="PASS" starttime="20190205 08:27:11.040" endtime="20190205 08:27:11.397"></status>
+</kw>
+<kw name="Click Element" library="WADLibrary">
+<arguments>
+<arg>Plus</arg>
+</arguments>
+<status status="PASS" starttime="20190205 08:27:11.397" endtime="20190205 08:27:11.715"></status>
+</kw>
+<kw name="Click Element" library="WADLibrary">
+<arguments>
+<arg>Two</arg>
+</arguments>
+<status status="PASS" starttime="20190205 08:27:11.715" endtime="20190205 08:27:12.041"></status>
+</kw>
+<kw name="Click Element" library="WADLibrary">
+<arguments>
+<arg>Equals</arg>
+</arguments>
+<status status="PASS" starttime="20190205 08:27:12.041" endtime="20190205 08:27:12.368"></status>
+</kw>
+<kw name="Sleep" library="BuiltIn">
+<doc>Pauses the test executed for the given time.</doc>
+<arguments>
+<arg>1</arg>
+</arguments>
+<msg timestamp="20190205 08:27:13.369" level="INFO">Slept 1 second</msg>
+<status status="PASS" starttime="20190205 08:27:12.368" endtime="20190205 08:27:13.369"></status>
+</kw>
+<kw name="Close Window" library="WADLibrary">
+<status status="PASS" starttime="20190205 08:27:13.369" endtime="20190205 08:27:13.414"></status>
+</kw>
+<kw name="Set Current Session" library="WADLibrary">
+<arguments>
+<arg>Root</arg>
+</arguments>
+<status status="PASS" starttime="20190205 08:27:13.414" endtime="20190205 08:27:13.414"></status>
+</kw>
+<kw name="Set Current Session" library="WADLibrary">
+<arguments>
+<arg>Paint</arg>
+</arguments>
+<status status="PASS" starttime="20190205 08:27:13.414" endtime="20190205 08:27:13.414"></status>
+</kw>
+<kw name="Set Focus" library="WADLibrary">
+<status status="PASS" starttime="20190205 08:27:13.414" endtime="20190205 08:27:13.533"></status>
+</kw>
+<kw name="Close Window" library="WADLibrary">
+<status status="PASS" starttime="20190205 08:27:13.536" endtime="20190205 08:27:13.673"></status>
+</kw>
+<kw name="Clean Up" library="WADLibrary" type="teardown">
+<status status="PASS" starttime="20190205 08:27:13.675" endtime="20190205 08:27:13.741"></status>
+</kw>
+<status status="PASS" starttime="20190205 08:27:07.693" endtime="20190205 08:27:13.742" critical="yes"></status>
+</test>
+<kw name="Tear Down Driver" library="WADLibrary" type="teardown">
+<status status="PASS" starttime="20190205 08:27:13.745" endtime="20190205 08:27:13.774"></status>
+</kw>
+<status status="PASS" starttime="20190205 08:27:00.794" endtime="20190205 08:27:13.774"></status>
+</suite>
+<statistics>
+<total>
+<stat pass="3" fail="0">Critical Tests</stat>
+<stat pass="3" fail="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="3" fail="0" id="s1" name="Wadlibrary Demo">Wadlibrary Demo</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
