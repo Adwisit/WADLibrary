@@ -117,3 +117,6 @@ dmypy.json
 
 # Folders
 .vscode/
+
+# Results in Demo
+/Demo/results/*
