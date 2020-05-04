@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="robotframework-wadlibrary",
-    version="0.0.3",
+    version="20.02.02",
     author="Elias Hachichou, Adwisit",
     author_email="elias.hachichou@adwisit.se",
     description="WADLibrary",

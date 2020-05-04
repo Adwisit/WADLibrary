@@ -43,6 +43,11 @@ class Keywords:
         for session in for_deletion:
             self.__sessions.remove(session)
 
+    def clean_up_session(self,name):
+        session = self.get_session(name)
+        self.delete_session(session.get_id())
+        self.__sessions.remove(session)
+
     def get_sessions(self):
         return self.__sessions
 
