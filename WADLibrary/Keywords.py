@@ -3,16 +3,20 @@ from .Sessions import Sessions
 from .common.keys import keys
 from .common import execute
 import time
+import re
 
 
 class Keywords:
     def __init__(self, path, platform, device_name, timeout):
         self.__sessions = []
-        self.__current_session = None
         self.__platform = platform
+        self.__current_session = None
         self.path = path
         self.device_name = device_name
         self.timeout = timeout
+        self.keylist = []
+        self.resultlist = []
+        
 
     def set_up(self):
         desired_caps = dict()
@@ -69,6 +73,7 @@ class Keywords:
         for session in self.__sessions:
             if session_id == session.get_id():
                 return session
+    
 
     def get_window_handle(self, using, value, session_id=None):
         if session_id is None:
@@ -78,6 +83,17 @@ class Keywords:
         json_obj = json.loads(win.text)
         handle = hex(int(json_obj['value']))
         return handle
+
+    def get_window_title(self, session_id=None):
+        """
+        Get the title of the window you currently handle. 
+        """
+        if session_id is None:
+            session_id = self.get_current_session_id()
+        res = execute.get(self.path + '/session/' + session_id + '/title')
+        json_obj = json.loads(res.text)
+        result = json_obj['value']
+        return result
 
     def attach_to_window(self, value, name, using='name', session_id=None):
         if session_id is None:
@@ -89,6 +105,29 @@ class Keywords:
         desired_caps["deviceName"] = self.device_name
         self.__current_session = self.create_session(desired_caps, name)
         self.get_sessions()
+        
+    def set_value_table(self, value, using='name', path = '//*', session_id=None):
+        """
+        You should use it before using keyword 'Click Element Text'.
+        Then you can click something you want by text.
+        If current window's name is calculator, and you set value = calculator, 
+        the all text element in caculator will write in value table.
+        It will take additional times to build table.
+        """
+        if session_id is None:
+            session_id = self.get_current_session_id()      
+        self.keylist.clear()
+        self.resultlist.clear() 
+        elem = self.find_element(value=value, using=using, session_id=session_id)
+        elems = self.find_elements_by_element(elem=elem, value= path, using='xpath', session_id=session_id)
+        self.keylist = [item.get('ELEMENT') for item in elems]
+        self.resultlist = [self.get_text(item, session_id=session_id) for item in self.keylist]
+            
+    def get_value_table_list(self):
+        """
+        Get the list of the value table.
+        """
+        return  self.resultlist
 
     def create_session(self, desired_caps, name):
         res = execute.post(self.path + '/session/', json={'desiredCapabilities': desired_caps})
@@ -117,6 +156,44 @@ class Keywords:
         json_obj = json.loads(res.text)
         elem = json_obj['value']['ELEMENT']
         return elem
+        
+    def find_elements(self, value, using='name', session_id=None):
+        """
+        You can use it to get an element list you find.
+        """
+        if session_id is None:
+            session_id = self.get_current_session_id()
+        res = execute.post(self.path + '/session/' + session_id + '/elements',
+                           json={'using': using, 'sessionId': session_id, 'value': value})
+        json_obj = json.loads(res.text)
+        elem = json_obj['value']
+        return elem
+        
+    def get_element_length(self, value, using='name', session_id=None):
+        """
+        Get the count of element(s) you find.
+        """
+        if session_id is None:
+            session_id = self.get_current_session_id()
+        res = execute.post(self.path + '/session/' + session_id + '/elements',
+                           json={'using': using, 'sessionId': session_id, 'value': value})
+        json_obj = json.loads(res.text)
+        elem = json_obj['value']
+        length = len(elem)
+        return length
+        
+    def find_sub_elements_under_parent(self, elem, value, using='xpath', session_id=None):
+        """
+        You can use it to find all the sub elements under a parent element.
+        """
+        if session_id is None:
+            session_id = self.get_current_session_id()
+        res = execute.post(self.path + '/session/' + session_id + '/element/' + elem + '/elements',
+                           json={'using': using, 'sessionId': session_id, 'value': value})
+        json_obj = json.loads(res.text)
+        elems = json_obj['value']    
+        return elems
+        
 
     def move_to_element(self, elem, session_id=None):
         if session_id is None:
@@ -128,6 +205,51 @@ class Keywords:
             session_id = self.get_current_session_id()
         buttons = {'left': 0, 'middle': 1, 'right': 2}
         execute.post(self.path + '/session/' + session_id + '/click', json={'button': buttons[button]})
+
+    def get_attribute(self, elem, attribute, session_id=None):
+        """
+        You can get the attribute of an element you want.
+        """
+        if session_id is None:
+            session_id = self.get_current_session_id()
+        res = execute.get(self.path + '/session/' + session_id + '/element/' + elem + '/attribute/' + attribute)
+        json_obj = json.loads(res.text)
+        result = json_obj['value']
+        return result
+        
+    def get_name(self, elem, session_id=None):
+        """
+        You can get the name of an element you want.
+        """
+        if session_id is None:
+            session_id = self.get_current_session_id()
+        res = execute.get(self.path + '/session/' + session_id + '/element/' + elem + '/attribute' + '/Name')
+        json_obj = json.loads(res.text)
+        result = json_obj['value']
+        return result
+
+    def is_enabled(self, elem, session_id=None):
+        """
+        You can get the status of an element you want.
+        It will return boolean value, enable status is true, disable status is false.
+        """
+        if session_id is None:
+            session_id = self.get_current_session_id()
+        res = execute.get(self.path + '/session/' + session_id + '/element/' + elem + '/enabled')
+        json_obj = json.loads(res.text)
+        result = json_obj['value']
+        return result
+    
+    def get_text(self, elem, session_id=None):
+        """
+        You can get the text of an element you want.
+        """
+        if session_id is None:
+            session_id = self.get_current_session_id()
+        res = execute.get(self.path + '/session/' + session_id + '/element/' + elem + '/text')
+        json_obj = json.loads(res.text)
+        result = json_obj['value']
+        return result
 
     def double_click(self, session_id=None):
         if session_id is None:
@@ -141,13 +263,88 @@ class Keywords:
         self.move_to_element(elem=elem, session_id=session_id)
         self.double_click(session_id=session_id)
 
-    def click_element(self, value, using='name', session_id=None):
+    def click_element(self, value, using='name', way='left', session_id=None):
         if session_id is None:
             session_id = self.get_current_session_id()
         elem = self.find_element(value=value, using=using, session_id=session_id)
-        self.move_to_element(elem=elem, session_id=session_id)
-        self.mouse_click(button='left', session_id=session_id)
+        if self.is_visible_v2(elem):
+            self.move_to_element(elem=elem, session_id=session_id)
+            self.mouse_click(button=way, session_id=session_id)
+        else:
+            ex = Exception(value + " is not visible")
+            raise ex
+        
+    def click_element_text(self, value, location=0, way='left', session_id=None):
+        """
+        You should use Keyword 'Set Value Table' before use it.
+        Then you can click the text exist on current window.
+        If the area have the same text not only one, 
+        you can set location to click the number of location of the same text elements.(location default value is 0)
+        """
+        if session_id is None:
+            session_id = self.get_current_session_id()
+        indexlist = [i for i,v in enumerate(self.resultlist) if v==value]
+        if self.is_visible_v2(self.keylist[indexlist[location]]):
+            self.move_to_element(elem=self.keylist[indexlist[location]], session_id=session_id)
+            self.mouse_click(button=way, session_id=session_id)
+        else:
+            ex = Exception("The Location " + str(location) + " of "  + value +  + " is not visible")
+            raise ex
 
+    def get_element_list(self, value, using='name', session_id=None):
+        """
+        Get a list of all element you find.
+        """
+        if session_id is None:
+            session_id = self.get_current_session_id()
+        elems = self.find_elements(value=value, using=using, session_id=session_id)
+        elem_list = []
+        for item in elems:
+            elem_list.append(item.get('ELEMENT'))
+        return elem_list
+    
+    def get_element_selected(self, value, using='name', session_id=None):
+        """
+        You can use it to get the status of the checkbox.
+        """
+        if session_id is None:
+            session_id = self.get_current_session_id()
+        elem = self.find_element(value=value, using=using, session_id=session_id)
+        res = execute.get(self.path + '/session/' + session_id + '/element/' + elem + '/selected')
+        json_obj = json.loads(res.text)
+        result = json_obj['value']
+        return result
+            
+    def get_element_attribute(self, value, attribute, using='name', session_id=None):
+        """
+        You can get the attribute of an element you want.
+        """
+        if session_id is None:
+            session_id = self.get_current_session_id()
+        elem = self.find_element(value=value, using=using, session_id=session_id)
+        result = self.get_attribute(elem=elem, attribute=attribute, session_id=session_id)
+        return result
+
+    def get_element_enable(self, value, using='name', session_id=None):
+        """
+        You can get the status of an element you want.
+        """
+        if session_id is None:
+            session_id = self.get_current_session_id()
+        elem = self.find_element(value=value, using=using, session_id=session_id)
+        result = self.is_enabled(elem=elem, session_id=session_id)
+        return result
+        
+    def get_element_text(self, value, using='name', session_id=None):
+        """
+        You can get the text of an element you want.
+        """
+        if session_id is None:
+            session_id = self.get_current_session_id()
+        elem = self.find_element(value=value, using=using, session_id=session_id)
+        result = self.get_text(elem=elem, session_id=session_id)
+        return result
+    
     def keyboard_keys(self, value, session_id=None):
         if session_id is None:
             session_id = self.get_current_session_id()
@@ -156,9 +353,7 @@ class Keywords:
     def send_key(self, value, session_id=None):
         if session_id is None:
             session_id = self.get_current_session_id()
-
         key = keys(value)
-
         execute.post(self.path + '/session/' + session_id + '/keys', json={'value': [key]})
 
     def enter_value(self, value, locator, using='name', session_id=None):
@@ -179,6 +374,7 @@ class Keywords:
             app_name = caps['app']
         json_obj = {'name': app_name}
         execute.post(self.path + '/session/' + session_id + '/window', json=json_obj)
+        
 
 #######################################################################################################################
 # Waiting functions
@@ -197,6 +393,17 @@ class Keywords:
             return False
         else:
             execute.analyse(res, catch_error=True)
+            
+    def is_visible_v2(self, elem, session_id=None):
+        """
+        If element you can see on the current window, the result will return true. 
+        """
+        if session_id is None:
+            session_id = self.get_current_session_id()
+        res = execute.get(self.path + '/session/' + session_id + '/element/' + elem + '/displayed')
+        json_obj = json.loads(res.text)
+        result = json_obj['value']
+        return result
 
     def wait_until_element_is_visible(self, locator, using='name', timeout=None, error=None, session_id=None):
         if timeout is None:
@@ -212,7 +419,7 @@ class Keywords:
             else:
                 return error or "Element '%s' was not visible in %s" % (locator, self.timeout)
 
-        self.wait_until_no_error(timeout, check_visibility)
+        self.wait_until_no_error(int(timeout), check_visibility)
 
     def wait_until_element_is_not_visible(self, locator, using='name', timeout=None, error=None, session_id=None):
         if timeout is None:
@@ -228,7 +435,7 @@ class Keywords:
             else:
                 return
 
-        self.wait_until_no_error(timeout, check_visibility)
+        self.wait_until_no_error(int(timeout), check_visibility)
 
     def wait_until(self, timeout, error, func, *args):
         error = error.replace('<TIMEOUT>', self.timeout)
