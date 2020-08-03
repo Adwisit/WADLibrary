@@ -363,6 +363,15 @@ class Keywords:
         execute.post(self.path + '/session/' + session_id + '/element/' + elem + '/value',
                      json={'value': list(value)})
 
+    def clear_value(self, locator, using='name', session_id=None):
+        """
+        You can use this function to clear the value of textbox.
+        """
+        if session_id is None:
+            session_id = self.get_current_session_id()
+        elem = self.find_element(locator, using, session_id)
+        execute.post(self.path + '/session/' + session_id + '/element/' + elem + '/clear')
+               
     def set_focus(self, session_id=None):
         if session_id is None:
             session_id = self.get_current_session_id()
