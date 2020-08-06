@@ -105,29 +105,6 @@ class Keywords:
         desired_caps["deviceName"] = self.device_name
         self.__current_session = self.create_session(desired_caps, name)
         self.get_sessions()
-        
-    def set_value_table(self, value, using='name', path = '//*', session_id=None):
-        """
-        You should use it before using keyword 'Click Element Text'.
-        Then you can click something you want by text.
-        If current window's name is calculator, and you set value = calculator, 
-        the all text element in caculator will write in value table.
-        It will take additional times to build table.
-        """
-        if session_id is None:
-            session_id = self.get_current_session_id()      
-        self.keylist.clear()
-        self.resultlist.clear() 
-        elem = self.find_element(value=value, using=using, session_id=session_id)
-        elems = self.find_elements_by_element(elem=elem, value= path, using='xpath', session_id=session_id)
-        self.keylist = [item.get('ELEMENT') for item in elems]
-        self.resultlist = [self.get_text(item, session_id=session_id) for item in self.keylist]
-            
-    def get_value_table_list(self):
-        """
-        Get the list of the value table.
-        """
-        return  self.resultlist
 
     def create_session(self, desired_caps, name):
         res = execute.post(self.path + '/session/', json={'desiredCapabilities': desired_caps})
@@ -267,28 +244,11 @@ class Keywords:
         if session_id is None:
             session_id = self.get_current_session_id()
         elem = self.find_element(value=value, using=using, session_id=session_id)
-        if self.is_visible_v2(elem):
+        if self.is_visible(elem):
             self.move_to_element(elem=elem, session_id=session_id)
             self.mouse_click(button=way, session_id=session_id)
         else:
             ex = Exception(value + " is not visible")
-            raise ex
-        
-    def click_element_text(self, value, location=0, way='left', session_id=None):
-        """
-        You should use Keyword 'Set Value Table' before use it.
-        Then you can click the text exist on current window.
-        If the area have the same text not only one, 
-        you can set location to click the number of location of the same text elements.(location default value is 0)
-        """
-        if session_id is None:
-            session_id = self.get_current_session_id()
-        indexlist = [i for i,v in enumerate(self.resultlist) if v==value]
-        if self.is_visible_v2(self.keylist[indexlist[location]]):
-            self.move_to_element(elem=self.keylist[indexlist[location]], session_id=session_id)
-            self.mouse_click(button=way, session_id=session_id)
-        else:
-            ex = Exception("The Location " + str(location) + " of "  + value +  + " is not visible")
             raise ex
 
     def get_element_list(self, value, using='name', session_id=None):
@@ -389,7 +349,7 @@ class Keywords:
 # Waiting functions
 #######################################################################################################################
 
-    def is_visible(self, value, using='name', session_id=None):
+    def is_exist(self, value, using='name', session_id=None):
         if session_id is None:
             session_id = self.get_current_session_id()
         res = execute.post(self.path + '/session/' + session_id + '/element',
@@ -403,7 +363,7 @@ class Keywords:
         else:
             execute.analyse(res, catch_error=True)
             
-    def is_visible_v2(self, elem, session_id=None):
+    def is_visible(self, elem, session_id=None):
         """
         If element you can see on the current window, the result will return true. 
         """
@@ -414,31 +374,31 @@ class Keywords:
         result = json_obj['value']
         return result
 
-    def wait_until_element_is_visible(self, locator, using='name', timeout=None, error=None, session_id=None):
+    def wait_until_element_is_exist(self, locator, using='name', timeout=None, error=None, session_id=None):
         if timeout is None:
             timeout = self.timeout
 
         def check_visibility():
-            visible = self.is_visible(locator, using, session_id)
-            if visible:
+            exist = self.is_exist(locator, using, session_id)
+            if exist:
                 return
-            elif visible is None:
+            elif exist is None:
                 return error or "Element locator '%s' did not match any elements after %s" % (
                                 locator, self.timeout)
             else:
-                return error or "Element '%s' was not visible in %s" % (locator, self.timeout)
+                return error or "Element '%s' was not exist in %s" % (locator, self.timeout)
 
         self.wait_until_no_error(int(timeout), check_visibility)
 
-    def wait_until_element_is_not_visible(self, locator, using='name', timeout=None, error=None, session_id=None):
+    def wait_until_element_is_not_exist(self, locator, using='name', timeout=None, error=None, session_id=None):
         if timeout is None:
             timeout = self.timeout
 
         def check_visibility():
-            visible = self.is_visible(locator, using, session_id)
-            if visible:
-                return error or "Element '%s' is still visible in %s" % (locator, self.timeout)
-            elif visible is None:
+            exist = self.is_exist(locator, using, session_id)
+            if exist:
+                return error or "Element '%s' is still exist in %s" % (locator, self.timeout)
+            elif exist is None:
                 return error or "Element locator '%s' did not match any elements after %s" % (
                                 locator, self.timeout)
             else:
